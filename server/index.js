@@ -1,19 +1,18 @@
-require('dotenv').config()
+require("dotenv").config();
 
-const mysql = require('mysql2')
+//* conexion a la base de datos
+const connectDb = require("./db/database")
 
-// Create the connection to the database
-const connection = mysql.createConnection(process.env.DATABASE_URL)
+connectDb().then((connection) => {
+  console.log("Connected to MySQL server");
+  connection.query("show tables")
+    .then(([results, fields]) => {
+      console.log(results); // results contains rows returned by server
+      console.log(fields); // fields contains extra metadata about results, if available
+    })
+    .catch(err => console.error(err));
+});
 
-// simple query
-connection.query('show tables', function (err, results, fields) {
-  console.log(results) // results contains rows returned by server
-  console.log(fields) // fields contains extra metadata about results, if available
-})
 
-// Example with placeholders
-connection.query('select 1 from dual where ? = ?', [1, 1], function (err, results) {
-  console.log(results)
-})
 
-connection.end()
+

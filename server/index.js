@@ -1,18 +1,26 @@
+const express = require("express");
+const app = express();
+const morgan = require("morgan");
+const cors = require("cors");
+
+// ! -- express settings
+
+app.set("port", process.env.PORT || 3000);
+
+// ! -- middlewares
 require("dotenv").config();
+app.use(morgan("dev"));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "*"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-//* conexion a la base de datos
-const connectDb = require("./db/database")
-
-connectDb().then((connection) => {
-  console.log("Connected to MySQL server");
-  connection.query("show tables")
-    .then(([results, fields]) => {
-      console.log(results); // results contains rows returned by server
-      console.log(fields); // fields contains extra metadata about results, if available
-    })
-    .catch(err => console.error(err));
+app.listen(3000, () => {
+  console.log(`Server on port ${app.get("port")}`);
 });
 
-
-
-
+module.exports = app;

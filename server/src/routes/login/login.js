@@ -1,5 +1,10 @@
 const { Router } = require("express");
 
+/**
+ * Importing the login controllers for sign up and login functionality.
+ * @module login
+ * @requires ../../controllers/login/login.controllers
+ */
 const {
   signUpWithJwtAuth,
   loginWithJwtAuth,

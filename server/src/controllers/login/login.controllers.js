@@ -1,19 +1,18 @@
-// const { v4: uuidv4 } = require("uuid");
-
-//* se debe crear el nuevo schema para validar los datos que se crean
-// const schemacreateProduct = require("../schemas/handleSchemas");
-
-//* crea una funcion que cree un user usando jwt auth (signUpWithJwtAuth)
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const connectDb = require("../../models/database");
 
+/**
+ * Handles the sign up process with JWT authentication.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>} - A promise that resolves when the sign up process is completed.
+ */
 const signUpWithJwtAuth = async (req, res, next) => {
   try {
     const dbConnection = await connectDb();
-
-    // check if a user with the given email already exists
     const [existingUsers] = await dbConnection.query(
       "SELECT * FROM USERS WHERE email = ?",
       [req.body.email]

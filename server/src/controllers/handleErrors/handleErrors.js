@@ -1,14 +1,21 @@
 const { v4: uuidv4 } = require("uuid");
 
+/**
+ * Handles errors and sends an error response to the client.
+ *
+ * @param {Error} err - The error object.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const handleError = (err, req, res) => {
   console.error(err);
 
-  const errorId = uuidv4(); //? Generar un ID de seguimiento de errores único
+  const errorId = uuidv4();
   const errorMessage =
     "Ha ocurrido un error en el servidor. Por favor, inténtelo de nuevo más tarde o póngase en contacto con el soporte técnico si el problema persiste.";
-  const errorDetails = process.env.NODE_ENV === "production" ? null : err.stack; //? Proporcionar detalles de seguimiento de errores solo en entornos de desarrollo
+  const errorDetails = process.env.NODE_ENV === "production" ? null : err.stack;
 
-  const statusCode = err.statusCode || 500; //? Usar el código de estado de respuesta proporcionado por el error, o 500 si no se proporciona
+  const statusCode = err.statusCode || 500;
 
   res.status(statusCode).json({
     id_error: errorId,

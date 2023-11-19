@@ -1,10 +1,9 @@
 const { Router } = require("express");
-
-/*const {
-  signUpWithJwtAuth,
-  loginWithJwtAuth,
-} = require("../../controllers/login/login.controllers");*/
-
+/**
+ * Retrieves all products.
+ * @function getAllProducts
+ * @returns {Array} Array of products.
+ */
 const {
   getAllProducts,
 } = require("../../controllers/products/products.controller");

@@ -12,7 +12,7 @@ const app = require("./index");
 const logueo = require("./src/routes/login/login");
 const productsRoutes = require("./src/routes/products/products");
 
-//* I'll use routes here ok
+//* I'll use routes here ok ok
 app.use("/api", logueo);
 app.use("/api", productsRoutes);
 

@@ -12,49 +12,66 @@ const connectDb = require("../../models/database");
  */
 const signUpWithJwtAuth = async (req, res, next) => {
   try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
+    }
+
     const dbConnection = await connectDb();
+
     const [existingUsers] = await dbConnection.query(
       "SELECT * FROM USERS WHERE email = ?",
-      [req.body.email]
+      [email]
     );
+
     if (existingUsers.length > 0) {
       return res
         .status(400)
         .json({ message: "A user with this email already exists." });
     }
 
-    const hashedPassword = await bcrypt.hash(req.body.password, 6);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = {
-      email: req.body.email,
-      password: hashedPassword,
-    };
-
-    const [rows] = await dbConnection.query(
+    const [result] = await dbConnection.query(
       "INSERT INTO USERS (email, password) VALUES (?, ?)",
-      [user.email, user.password]
+      [email, hashedPassword]
     );
-    user.id = rows.insertId;
 
-    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY);
+    const userId = result.insertId;
 
-    await res.json({
+    const token = jwt.sign({ id: userId }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    }); // Added token expiration
+
+    return res.status(201).json({
       token,
       message: "User created successfully.",
     });
   } catch (err) {
-    next(err);
+    console.error(err);
+    return next(err);
   }
 };
-
 const loginWithJwtAuth = async (req, res, next) => {
   try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
+    }
+
     const dbConnection = await connectDb();
 
     const [users] = await dbConnection.query(
       "SELECT id, password FROM USERS WHERE email = ?",
-      [req.body.email]
+      [email]
     );
+
     if (users.length === 0) {
       return res.status(401).json({
         token: null,
@@ -64,10 +81,8 @@ const loginWithJwtAuth = async (req, res, next) => {
 
     const user = users[0];
 
-    const passwordMatch = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
     if (!passwordMatch) {
       return res.status(401).json({
         token: null,
@@ -75,14 +90,17 @@ const loginWithJwtAuth = async (req, res, next) => {
       });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY);
+    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    }); //? token expiration
 
-    res.json({
+    return res.json({
       token,
       message: "Login successful.",
     });
   } catch (err) {
-    next(err);
+    console.error(err); // Log the error for debugging
+    return next(err);
   }
 };
 

@@ -6,10 +6,12 @@ const { Router } = require("express");
  */
 const {
   getAllProducts,
+  getFilteredProducts,
 } = require("../../controllers/products/products.controller");
 
 const router = Router();
 
 router.get("/products", getAllProducts);
+router.get("/products/search", getFilteredProducts);
 
 module.exports = router;

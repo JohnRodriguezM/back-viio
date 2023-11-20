@@ -9,6 +9,7 @@ const { v4: uuidv4 } = require("uuid");
  */
 const handleError = (err, req, res) => {
   console.error(err);
+  console.log('helololokpokjoijoi');
 
   const errorId = uuidv4();
   const errorMessage =

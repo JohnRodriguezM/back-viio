@@ -32,3 +32,10 @@ Si quieres contribuir, sigue estos pasos:
 4. Empuja tus cambios a tu fork: `git push origin nueva-funcionalidad`
 5. Crea un pull request en GitHub.
 
+
+## Scripts Disponibles
+
+En el directorio del proyecto, puedes ejecutar:
+
+- `npm run dev`: Inicia la aplicación en modo desarrollo.
+- `npm run test`: Ejecuta las pruebas en modo interactivo.

@@ -38,3 +38,8 @@ app.listen(app.get("port"), () => {
 
 // Exporting the Express app to be used in other modules
 module.exports = app;
+
+
+//* backend deploy in railway app using docker
+
+// https://back-viio-production.up.railway.app/api/products
